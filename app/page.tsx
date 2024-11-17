@@ -3,10 +3,16 @@ import styles from "./page.module.css";
 import DonutChart from "@/components/DonutChart";
 
 export default function Root() {
+  const chartData = [
+    { label: 'Acertos', value: 60, color: '#4F63E7' },
+    { label: 'Erros', value: 30, color: '#F2994A' },
+    { label: 'Parciais', value: 10, color: '#56CCF2' },
+  ];
+  
   return (
     <div className={styles.root}>
       {/* <AnimatedTextWithDecimal targetValue={0} /> */}
-      <DonutChart errors={35} corrects={65} />
+      return <DonutChart data={chartData} />;
     </div>
   );
 }

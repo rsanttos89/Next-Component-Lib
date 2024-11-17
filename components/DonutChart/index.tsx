@@ -3,11 +3,6 @@
 import React, { useState } from 'react';
 import styles from './DonutChart.module.css';
 
-interface DonutChartProps {
-  errors: number;
-  corrects: number;
-}
-
 interface Segment {
   label: string;
   value: number;
@@ -16,13 +11,12 @@ interface Segment {
   endPercent?: number;
 }
 
-const DonutChart: React.FC<DonutChartProps> = ({ errors, corrects }) => {
-  const [status, setStatus] = useState<Partial<Segment>>({});
+interface DonutChartProps {
+  data: Segment[];
+}
 
-  const data: Segment[] = [
-    { label: 'Acertos', value: corrects, color: '#4F63E7' },
-    { label: 'Erros', value: errors, color: '#F2994A' },
-  ];
+const DonutChart: React.FC<DonutChartProps> = ({ data }) => {
+  const [status, setStatus] = useState<Partial<Segment>>({});
 
   const calculateSegments = (): Segment[] => {
     let cumulativePercent = 0;
@@ -82,10 +76,10 @@ const DonutChart: React.FC<DonutChartProps> = ({ errors, corrects }) => {
         <div className={styles.centerLabel}>
           <div className={styles.labelContent}>
             <div className={styles.value}>
-              {status.value !== undefined ? status.value : corrects}%
+              {status.value !== undefined ? status.value : data[0]?.value || 0}%
             </div>
             <span className={styles.label}>
-              {status.label || 'Acertos'}
+              {status.label || data[0]?.label || ''}
             </span>
           </div>
         </div>
