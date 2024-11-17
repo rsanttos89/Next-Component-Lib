@@ -1,41 +1,51 @@
+Aqui está a documentação corrigida e atualizada para o novo componente `DonutChart`, que aceita um número arbitrário de segmentos:
+
+---
+
 # DonutChart Component
 
-A React component for rendering a donut chart, useful for visualizing proportional data like "correct" and "error" values in percentages. This component includes interactive legend buttons that update the chart's displayed data.
+A React component for rendering a customizable donut chart, ideal for visualizing proportional data with multiple segments. The chart includes an interactive legend and dynamic styling.
 
 ---
 
 ## Features
 
-- **Interactive Chart**: Allows users to view specific data segments by clicking legend buttons.
-- **Dynamic Styling**: Fully styled with an associated CSS module.
-- **Customizable Colors**: Each segment of the donut chart has its own color.
+- **Dynamic Segments**: Supports any number of data segments, each with its own label, value, and color.
+- **Interactive Legend**: Users can interact with the chart by clicking on legend buttons to update the displayed segment.
+- **Customizable Styling**: Fully styled using a CSS module for easy customization.
 
 ---
 
 ## Installation
 
-To use the `DonutChart` component in your project, ensure you have a React environment set up. Then, add the file to your project.
+To use the `DonutChart` component in your project:
 
-1. Add the `DonutChart` component to your project.
-2. Add the associated CSS module `DonutChart.module.css` for styling.
+1. Add the `DonutChart` component file to your project.
+2. Include the associated CSS module `DonutChart.module.css` for styling.
 
 ---
 
 ## Usage
 
-Import the `DonutChart` component and use it in your application.
+Import the `DonutChart` component and pass an array of data segments as a prop.
 
-```jsx
+```tsx
 'use client';
 
 import React from 'react';
 import DonutChart from './DonutChart';
 
 const App = () => {
+  const chartData = [
+    { label: 'Corrects', value: 70, color: '#4F63E7' },
+    { label: 'Errors', value: 20, color: '#F2994A' },
+    { label: 'Partial', value: 10, color: '#56CCF2' },
+  ];
+
   return (
     <div>
       <h1>Results</h1>
-      <DonutChart errors={20} corrects={80} />
+      <DonutChart data={chartData} />
     </div>
   );
 };
@@ -45,58 +55,67 @@ export default App;
 
 ### Props
 
-| Prop Name | Type   | Description                              | Example Value |
-|-----------|--------|------------------------------------------|---------------|
-| `errors`  | number | Percentage of errors to display (0-100). | `20`          |
-| `corrects`| number | Percentage of corrects to display (0-100).| `80`         |
+| Prop Name | Type        | Description                                 | Example Value                                                                 |
+|-----------|-------------|---------------------------------------------|-------------------------------------------------------------------------------|
+| `data`    | `Segment[]` | An array of segments, where each segment includes `label`, `value`, and `color`. | `[{ label: 'Corrects', value: 70, color: '#4F63E7' }]`                       |
+
+### Segment Object
+
+Each segment in the `data` array should have the following structure:
+
+| Field    | Type     | Description                                     | Example Value |
+|----------|----------|-------------------------------------------------|---------------|
+| `label`  | `string` | The label for the segment.                      | `'Corrects'`  |
+| `value`  | `number` | The proportional value for the segment.         | `70`          |
+| `color`  | `string` | The color for the segment (any valid CSS color).| `'#4F63E7'`   |
 
 ---
 
 ## Component Structure
 
-- **Data Segments**: Each segment (`Acertos` and `Erros`) is dynamically calculated based on the input values (`errors` and `corrects`).
-- **SVG Paths**: The chart is drawn using SVG arcs, ensuring smooth and precise visualization.
-- **Interactive Legend**: Clicking on a legend item updates the center label with the associated data.
+- **Data Segments**: The component dynamically calculates chart segments based on the input `data` array.
+- **SVG Paths**: Renders smooth arcs using SVG paths for each segment.
+- **Interactive Legend**: Clicking on a legend item updates the displayed data in the center of the chart.
 
 ---
 
 ## Styling
 
-The component relies on a CSS module (`DonutChart.module.css`) for styling. Below is an example of how you might structure the CSS:
+The component uses a CSS module (`DonutChart.module.css`) for styling. Below is an example of how the CSS file can be structured:
 
 ---
 
 ## Functions
 
 ### `calculateSegments`
-Calculates the start and end percentages for each chart segment, based on the input data.
+Calculates the start and end percentages for each chart segment based on the total value of all segments.
 
 ### `polarToCartesian`
-Converts polar coordinates to Cartesian for SVG rendering.
+Converts polar coordinates to Cartesian coordinates for rendering SVG arcs.
 
 ### `describeArc`
-Generates the SVG path for a chart segment using start and end angles.
+Generates an SVG path string for a segment, using start and end angles.
 
 ---
 
 ## Accessibility
 
-- **Keyboard Navigation**: The legend buttons can be navigated and activated using the keyboard.
-- **Visual Indicators**: High contrast colors make the chart segments easy to distinguish.
+- **Keyboard Navigation**: Legend buttons are focusable and can be activated using the keyboard.
+- **Visual Clarity**: High-contrast colors ensure the chart is easily distinguishable.
 
 ---
 
 ## Notes
 
-- Ensure that the `errors` and `corrects` props add up to 100 for the chart to represent complete data.
-- The inner circle color and size can be customized via the `CSS` file.
+- The sum of all `value` fields in the `data` array should ideally equal 100 to represent a complete dataset.
+- Inner circle color and size can be customized through the CSS module.
 
 ---
 
 ## Future Improvements
 
-- **Dynamic Data Update**: Allow real-time updates to the chart based on external inputs.
-- **Animations**: Add smooth transitions for a better user experience.
-- **Tooltips**: Display detailed information on hover. 
+- **Real-Time Updates**: Support for dynamically updating the chart data without re-rendering the component.
+- **Animations**: Smooth transitions for data changes to improve user experience.
+- **Tooltips**: Add tooltips to display detailed segment information on hover.
 
 Feel free to contribute enhancements or suggest improvements!
