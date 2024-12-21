@@ -1,18 +1,15 @@
 .app {
-  border: 1px solid #ccc;
-  width: 300px;
-  margin: 20px auto;
   text-align: center;
-  font-family: Arial, sans-serif;
+  border: 1px solid #ccc;
+  text-transform: uppercase;
 }
 
 .calendarHeader {
   display: flex;
+  background-color: #f7f7f7;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  font-size: 16px;
-  background-color: #f7f7f7;
+  padding: 16px;
 }
 
 .calendarGrid {
@@ -22,28 +19,48 @@
 
 .calendarDays {
   display: grid;
+  justify-items: center;
   grid-template-columns: repeat(7, 1fr);
   background-color: #f1f1f1;
   font-weight: bold;
+  padding: 4px;
   color: #666;
+  gap: 4px;
 }
 
 .calendarDay {
-  padding: 10px;
+  min-width: 30px;
+  max-width: 30px;
+  min-height: 30px;
+  max-height: 30px;
   text-align: center;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
 }
 
 .calendarDates {
   display: grid;
+  justify-items: center;
   grid-template-columns: repeat(7, 1fr);
+  padding: 4px;
+  gap: 4px;
 }
 
 .calendarDate {
-  padding: 10px;
+  min-width: 30px;
+  max-width: 30px;
+  min-height: 30px;
+  max-height: 30px;
   cursor: pointer;
   text-align: center;
-  border-radius: 50%; /* Make all dates circular */
+  border-radius: 100%;
   transition: background-color 0.3s, color 0.3s;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
 }
 
 .calendarDate:hover {
@@ -54,7 +71,7 @@
   background-color: #0070f3;
   color: white;
   font-weight: bold;
-  border-radius: 50%;
+  border-radius: 100%;
 }
 
 .calendarDate.selected {
