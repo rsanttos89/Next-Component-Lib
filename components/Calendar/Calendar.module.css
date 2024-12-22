@@ -85,6 +85,22 @@
   font-weight: bold;
 }
 
+.today {
+  font-weight: bold;
+  background-color: #007bff;
+  color: white;
+}
+
+.selected {
+  background-color: #ffcc00;
+  color: white;
+}
+
+.faded {
+  color: #bbb;
+  opacity: 0.5;
+}
+
 .footer {
   padding: 10px;
   background-color: #f0f0f0;

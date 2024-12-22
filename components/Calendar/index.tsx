@@ -28,6 +28,11 @@ export interface SelectedDates {
   endDate: number | null;
 }
 
+const getStartDayOffset = (year: number, month: number): number => {
+  const firstDayOfMonth = new Date(year, month, 1);
+  return firstDayOfMonth.getDay(); // Retorna o índice do dia da semana (0 para domingo, 1 para segunda, etc.)
+};
+
 const Calendar: React.FC<ChildComponentProps> = ({ onValueChange }) => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today);
@@ -35,6 +40,46 @@ const Calendar: React.FC<ChildComponentProps> = ({ onValueChange }) => {
     startDate: today.getTime(),
     endDate: today.getTime(),
   });
+  const startDayOffset = getStartDayOffset(currentMonth.getFullYear(), currentMonth.getMonth());
+  const getPreviousMonthDays = (year: number, month: number, count: number): Date[] => {
+    const days: Date[] = [];
+    const date = new Date(year, month, 0); // Último dia do mês anterior
+    
+    for (let i = count - 1; i >= 0; i--) {
+      const previousDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - i);
+      days.push(previousDate);
+    }
+    return days;
+  };
+  
+  const getNextMonthDays = (year: number, month: number, count: number): Date[] => {
+    const days: Date[] = [];
+    const date = new Date(year, month + 1, 1); // Primeiro dia do próximo mês
+    
+    for (let i = 0; i < count; i++) {
+      const nextDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + i);
+      days.push(nextDate);
+    }
+    return days;
+  };
+
+   // Get all the days in the current month
+   const daysInMonth = getDaysInMonth(currentMonth.getFullYear(), currentMonth.getMonth());
+   
+  // Calcule os dias do mês anterior e do próximo mês
+  const previousMonthDays = getPreviousMonthDays(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    startDayOffset
+  );
+
+  const totalDays = previousMonthDays.length + daysInMonth.length;
+  const nextMonthDaysCount = totalDays % 7 === 0 ? 0 : 7 - (totalDays % 7);
+  const nextMonthDays = getNextMonthDays(
+    currentMonth.getFullYear(),
+    currentMonth.getMonth(),
+    nextMonthDaysCount
+  );
 
   // Function to go to the next month
   const handleNextMonth = () => {
@@ -92,27 +137,34 @@ const Calendar: React.FC<ChildComponentProps> = ({ onValueChange }) => {
     sendValueToParent(selectedDates);
   }, [selectedDates]);
 
-  // Get all the days in the current month
-  const daysInMonth = getDaysInMonth(currentMonth.getFullYear(), currentMonth.getMonth());
 
   return (
     <div className={styles.app}>
-      {/* Calendar header with navigation buttons */}
       <header className={styles.calendarHeader}>
         <button onClick={handlePreviousMonth}>{'<'}</button>
         <h2>{currentMonth.toLocaleString('default', { month: 'short', year: 'numeric' })}</h2>
         <button onClick={handleNextMonth}>{'>'}</button>
       </header>
-
-      {/* Calendar grid displaying days of the week and dates */}
+  
       <div className={styles.calendarGrid}>
         <div className={styles.calendarDays}>
           {['d', 's', 't', 'q', 'q', 's', 's'].map((day) => (
             <div key={day} className={styles.calendarDay}>{day}</div>
           ))}
         </div>
-
+  
         <div className={styles.calendarDates}>
+          {/* Renderize os dias do mês anterior com opacidade */}
+          {previousMonthDays.map((day) => (
+            <div
+              key={`prev-${day.toISOString()}`}
+              className={`${styles.calendarDate} ${styles.faded}`}
+            >
+              {day.getDate()}
+            </div>
+          ))}
+  
+          {/* Renderize os dias do mês atual */}
           {daysInMonth.map((day) => (
             <div
               key={day.toISOString()}
@@ -120,6 +172,16 @@ const Calendar: React.FC<ChildComponentProps> = ({ onValueChange }) => {
                 day.toDateString() === today.toDateString() ? styles.today : ''
               } ${isSelected(day) ? styles.selected : ''}`}
               onClick={() => handleDayClick(day)}
+            >
+              {day.getDate()}
+            </div>
+          ))}
+  
+          {/* Renderize os dias do próximo mês com opacidade */}
+          {nextMonthDays.map((day) => (
+            <div
+              key={`next-${day.toISOString()}`}
+              className={`${styles.calendarDate} ${styles.faded}`}
             >
               {day.getDate()}
             </div>
